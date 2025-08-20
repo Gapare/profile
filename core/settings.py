@@ -73,12 +73,20 @@ EMAIL_HOST_PASSWORD = '@gp200.com'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+import os
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DB_NAME", "postgres"),
+        "USER": os.environ.get("DB_USER", "postgres"),
+        "PASSWORD": os.environ.get("DB_PASSWORD", "@gp200.com"),
+        "HOST": os.environ.get("DB_HOST", "tvikbqfeijsapbaygccj.supabase.co"),
+        "PORT": os.environ.get("DB_PORT", "5432"),
     }
+
 }
+
 
 
 # Password validation

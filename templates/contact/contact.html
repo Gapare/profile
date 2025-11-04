@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section id="contact" class="py-16">
+    <div class="container mx-auto px-4">
+        <!-- Contact Header -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Have a project in mind or want to collaborate? Feel free to reach out!
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Contact Form -->
+            <div class="lg:w-1/2">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
+                    {% if messages %}
+                    <div class="mb-6">
+                        {% for message in messages %}
+                        <div class="px-4 py-3 rounded {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.name.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.email.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Message</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.message.errors.as_text }}</p>
+                            {% endif %}
+                        </div>
+
+
+
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-paper-plane mr-2"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="lg:w-1/2">
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg p-6 md:p-8 h-full">
+                    <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-envelope text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white">Email</h4>
+                                <a href="mailto:info@fiks.co.zw" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                    info@fiks.co.zw
+                                </a>
+                            </div>
+                        </div> 
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-map-marker-alt text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white">Location</h4>
+                                <p class="text-gray-600 dark:text-gray-300">Gokwe, Zimbabwe</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-clock text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900 dark:text-white">Availability</h4>
+                                <p class="text-gray-600 dark:text-gray-300">Sunday - Friday: 8am - 5pm</p>
+                                <p class="text-gray-600 dark:text-gray-300">Saturday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Links -->
+                    <div class="mt-8">
+                        <h4 class="font-medium text-gray-900 dark:text-white mb-4">Follow Me</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://github.com/gapare" target="_blank" class="bg-gray-200 dark:bg-gray-600 p-3 rounded-full hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                <i class="fab fa-github text-gray-700 dark:text-gray-200"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/ephias-gapare-9957732b9" target="_blank" class="bg-gray-200 dark:bg-gray-600 p-3 rounded-full hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                <i class="fab fa-linkedin-in text-gray-700 dark:text-gray-200"></i>
+                            </a>
+                            <a href="https://twitter.com/gapare" target="_blank" class="bg-gray-200 dark:bg-gray-600 p-3 rounded-full hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                <i class="fab fa-twitter text-gray-700 dark:text-gray-200"></i>
+                            </a>
+                            <a href="https://fiks.co.zw" target="_blank" class="bg-gray-200 dark:bg-gray-600 p-3 rounded-full hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                <i class="fas fa-globe text-gray-700 dark:text-gray-200"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

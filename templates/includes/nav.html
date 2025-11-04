@@ -1,0 +1,37 @@
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="Profile" width="64" height="64"
+                    class="rounded-full w-16 h-16 object-cover shadow-lg">
+                {% endif %}
+                <a href="/" class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    My<span class="text-gray-800 dark:text-white">Portfolio</span>
+                </a>
+            </div>
+
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a>
+                <a href="{% url 'projects' %}"
+                    class="hover:text-blue-600 dark:hover:text-blue-400 transition">Projects</a>
+                <a href="{% url 'blog_home' %}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Blog</a>
+                <a href="{% url 'contact' %}"
+                    class="hover:text-blue-600 dark:hover:text-blue-400 transition">Contact</a>
+
+
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden flex-col space-y-2 mt-4">
+            <a href="#about" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">About</a>
+            <a href="{% url 'projects' %}" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">Projects</a>
+            <a href="{% url 'blog_home' %}" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">Blog</a>
+            <a href="{% url 'contact' %}" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">Contact</a>
+            
+        </div>
+    </nav>
+</header>

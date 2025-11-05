@@ -2,23 +2,110 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="py-24 bg-gray-100 dark:bg-gray-900 text-center transition-colors duration-300">
+<section class="py-24 bg-gradient-to-r from-blue-900 to-indigo-900 dark:from-gray-900 dark:to-gray-800 text-center text-white transition-colors duration-300">
     <div class="container mx-auto px-4">
-       <h1 class="text-5xl md:text-6xl font-extrabold text-gray-800 dark:text-white mb-6">
-    Hi, I'm <span id="typed-text" class="text-blue-600 dark:text-blue-400"></span>
-</h1>
-
-        <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10">
-            Software Engineer & Problem Solver
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-6">
+            Transform Your Ideas Into <span class="text-blue-400">Digital Solutions</span>
+        </h1>
+        <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">
+            We build scalable, high-performance software that drives business growth and solves complex challenges.
         </p>
         <div class="space-x-4">
-            <a href="#projects" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow transition">
-                View My Work
+            <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg shadow-lg transition transform hover:-translate-y-1 font-semibold text-lg">
+                Start Your Project
             </a>
-            <a href="{% url 'terminal' %}"
-                class="border-2 border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800 px-6 py-3 rounded-lg transition">
-                See My Backend Work Skills 
+            <a href="#projects"
+                class="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg transition font-semibold text-lg">
+                View Our Work
             </a>
+        </div>
+    </div>
+</section>
+
+<!-- Value Proposition Section -->
+<section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center text-gray-900 dark:text-white mb-16">Why Choose Our Software Engineering Services</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="text-center p-6">
+                <div class="bg-blue-100 dark:bg-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-rocket text-blue-600 dark:text-blue-400 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Scalable Solutions</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    We build software that grows with your business, ensuring performance at any scale.
+                </p>
+            </div>
+            
+            <div class="text-center p-6">
+                <div class="bg-blue-100 dark:bg-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-shield-alt text-blue-600 dark:text-blue-400 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Secure & Reliable</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Security-first approach with robust testing and quality assurance processes.
+                </p>
+            </div>
+            
+            <div class="text-center p-6">
+                <div class="bg-blue-100 dark:bg-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-clock text-blue-600 dark:text-blue-400 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Timely Delivery</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Agile development methodology ensures projects are delivered on time and within budget.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-20 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center text-gray-900 dark:text-white mb-16">Our Services</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+                <div class="text-blue-600 dark:text-blue-400 mb-4">
+                    <i class="fas fa-globe text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Web Development</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Responsive, high-performance websites and web applications built with modern technologies.
+                </p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+                <div class="text-blue-600 dark:text-blue-400 mb-4">
+                    <i class="fas fa-mobile-alt text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Mobile Apps</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Native and cross-platform mobile applications for iOS and Android.
+                </p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+                <div class="text-blue-600 dark:text-blue-400 mb-4">
+                    <i class="fas fa-cloud text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Cloud Solutions</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Scalable cloud infrastructure, migration, and optimization services.
+                </p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300">
+                <div class="text-blue-600 dark:text-blue-400 mb-4">
+                    <i class="fas fa-cogs text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">API Development</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    RESTful and GraphQL APIs to power your applications and integrations.
+                </p>
+            </div>
         </div>
     </div>
 </section>
@@ -30,19 +117,23 @@
         <div class="md:w-1/3">
             {% if profile.profile_image %}
             <img src="{{ profile.profile_image.url }}" alt="Profile"
-                class="rounded-full w-64 h-64 object-cover mx-auto shadow-lg">
+                class="rounded-xl w-full max-w-md object-cover mx-auto shadow-lg">
             {% endif %}
         </div>
 
         <!-- Bio and Skills -->
         <div class="md:w-2/3 text-gray-700 dark:text-gray-300">
-            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">About Me</h2>
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">About Our Company</h2>
             <p class="mb-6 leading-relaxed text-lg">
-                I'm a passionate software engineer with experience building web, mobile, and desktop applications.
-                I love solving complex problems and creating efficient, scalable solutions.
+                We are a team of passionate software engineers with expertise in building web, mobile, and desktop applications. 
+                Our mission is to transform your ideas into robust digital solutions that drive business growth.
+            </p>
+            <p class="mb-6 leading-relaxed text-lg">
+                With years of experience across various industries, we understand the unique challenges businesses face 
+                and create tailored software that addresses those specific needs.
             </p>
 
-            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">My Skills</h3>
+            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Expertise</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {% for skill in skills %}
                 <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-sm">
@@ -62,12 +153,12 @@
 <!-- Projects Section -->
 <section id="projects" class="py-20 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
     <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center text-gray-900 dark:text-white mb-12">My Projects</h2>
+        <h2 class="text-4xl font-bold text-center text-gray-900 dark:text-white mb-12">Our Portfolio</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for project in projects %}
             <div
-                class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
                 {% if project.image %}
                 <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-48 object-cover">
                 {% endif %}
@@ -100,13 +191,101 @@
                         {% if project.live_url %}
                         <a href="{{ project.live_url }}" target="_blank"
                             class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center text-sm transition">
-                            <i class="fas fa-external-link-alt mr-2"></i> Live
+                            <i class="fas fa-external-link-alt mr-2"></i> Live Demo
                         </a>
                         {% endif %}
                     </div>
                 </div>
             </div>
             {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center text-gray-900 dark:text-white mb-16">What Our Clients Say</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl">
+                <div class="text-yellow-400 mb-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-6 italic">
+                    "The team delivered exactly what we needed on time and within budget. Their technical expertise and communication throughout the project were exceptional."
+                </p>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full mr-4"></div>
+                    <div>
+                        <h4 class="font-bold text-gray-900 dark:text-white">Sarah Johnson</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">CTO, TechSolutions Inc.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl">
+                <div class="text-yellow-400 mb-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-6 italic">
+                    "Working with this team transformed our business operations. The custom software solution they built has increased our efficiency by 40%."
+                </p>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full mr-4"></div>
+                    <div>
+                        <h4 class="font-bold text-gray-900 dark:text-white">Michael Chen</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Founder, GrowthLabs</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl">
+                <div class="text-yellow-400 mb-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-6 italic">
+                    "Outstanding problem-solving skills and technical knowledge. They took our complex requirements and turned them into an elegant, user-friendly application."
+                </p>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-600 rounded-full mr-4"></div>
+                    <div>
+                        <h4 class="font-bold text-gray-900 dark:text-white">Emily Rodriguez</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Product Manager, InnovateCo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA Section -->
+<section id="contact" class="py-20 bg-gradient-to-r from-blue-900 to-indigo-900 dark:from-gray-900 dark:to-gray-800 text-white text-center transition-colors duration-300">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold mb-6">Ready to Start Your Project?</h2>
+        <p class="text-xl mb-10 max-w-2xl mx-auto">
+            Let's discuss how we can help bring your ideas to life with cutting-edge software solutions.
+        </p>
+        <div class="space-x-4">
+            <a href="mailto:contact@example.com" class="bg-white text-blue-900 hover:bg-gray-100 px-8 py-4 rounded-lg shadow-lg transition transform hover:-translate-y-1 font-semibold text-lg inline-block">
+                Contact Us Today
+            </a>
+            <a href="#projects"
+                class="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg transition font-semibold text-lg inline-block">
+                View Our Work
+            </a>
         </div>
     </div>
 </section>

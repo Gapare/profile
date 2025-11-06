@@ -1,37 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="{% if request.COOKIES.theme == 'dark' %}dark{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Portfolio{% endblock %}</title>
+    <link id="dynamic-favicon" rel="icon" href="{{ profile.profile_image.url }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Mobile-first responsive container */
+        .container-mobile {
+            width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (min-width: 640px) {
+            .container-mobile {
+                max-width: 640px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .container-mobile {
+                max-width: 768px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container-mobile {
+                max-width: 1024px;
+            }
+        }
+        
+        /* Mobile menu animation */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .mobile-menu.open {
+            max-height: 300px;
+        }
+        
+        /* Touch-friendly button */
+        .btn-touch {
+            min-height: 44px;
+            min-width: 44px;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+
 <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm">
-    <nav class="container mx-auto px-6 py-4">
+    <nav class="container-mobile py-4">
         <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
+            <!-- Logo and Profile -->
+            <div class="flex items-center space-x-3">
                 {% if profile.profile_image %}
-                <img src="{{ profile.profile_image.url }}" alt="Profile" width="64" height="64"
-                    class="rounded-full w-16 h-16 object-cover shadow-lg">
+                <img src="{{ profile.profile_image.url }}" alt="Profile" 
+                    class="rounded-full w-12 h-12 md:w-16 md:h-16 object-cover shadow-lg">
                 {% endif %}
-                <a href="/" class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                <a href="/" class="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">
                     My<span class="text-gray-800 dark:text-white">Portfolio</span>
                 </a>
             </div>
 
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="btn-touch md:hidden flex items-center justify-center p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
 
-            <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center space-x-8">
+            <!-- Desktop Navigation - Hidden on mobile -->
+            <div class="hidden md:flex items-center space-x-6">
                 <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a>
-                <a href="{% url 'projects' %}"
-                    class="hover:text-blue-600 dark:hover:text-blue-400 transition">Projects</a>
+                <a href="{% url 'projects' %}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Projects</a>
                 <a href="{% url 'blog_home' %}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Blog</a>
-                <a href="{% url 'contact' %}"
-                    class="hover:text-blue-600 dark:hover:text-blue-400 transition">Contact</a>
-
-
+                <a href="{% url 'contact' %}" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Contact</a>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden hidden flex-col space-y-2 mt-4">
-            <a href="#about" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">About</a>
-            <a href="{% url 'projects' %}" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">Projects</a>
-            <a href="{% url 'blog_home' %}" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">Blog</a>
-            <a href="{% url 'contact' %}" class="block py-2 hover:text-blue-600 dark:hover:text-blue-400">Contact</a>
-            
+        <!-- Mobile Menu - Hidden by default -->
+        <div id="mobile-menu" class="mobile-menu md:hidden flex-col space-y-3 mt-4 px-2">
+            <a href="#about" class="block py-3 px-4 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">About</a>
+            <a href="{% url 'projects' %}" class="block py-3 px-4 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">Projects</a>
+            <a href="{% url 'blog_home' %}" class="block py-3 px-4 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">Blog</a>
+            <a href="{% url 'contact' %}" class="block py-3 px-4 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition">Contact</a>
         </div>
     </nav>
 </header>
+
+<script>
+    // Mobile menu functionality
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu.classList.toggle('open');
+    });
+</script>
+
+</body>
+</html>

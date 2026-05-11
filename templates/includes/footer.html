@@ -1,0 +1,318 @@
+<footer class="bg-gray-100 dark:bg-gray-800 mt-auto">
+    <div class="container mx-auto px-6 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white">Fiks</h2>
+                <p class="text-gray-600 dark:text-gray-300">Software Engineer</p>
+            </div>
+            
+            <div class="flex space-x-6">
+                <a href="https://github.com/gapare" target="_blank" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                    <i class="fab fa-github text-2xl"></i>
+                </a>
+                <a href="https://linkedin.com/in/ephias-gapare-9957732b9" target="_blank" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                    <i class="fab fa-linkedin text-2xl"></i>
+                </a>
+                <a href="https://twitter.com/gapare" target="_blank" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                    <i class="fab fa-x text-2xl"></i>
+                </a>
+                <a href="mailto:engineerfiks@gmail.com" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+                    <i class="fas fa-envelope text-2xl"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 text-center text-gray-500 dark:text-gray-400">
+            <p>&copy; 2025 Fiks. All rights reserved.</p>
+        </div>
+    </div>
+    
+    <!-- Scroll to top button -->
+    <button id="scroll-top" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <script>
+        // Scroll to top button
+        const scrollButton = document.getElementById('scroll-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.remove('opacity-0', 'invisible');
+                scrollButton.classList.add('opacity-100', 'visible');
+            } else {
+                scrollButton.classList.remove('opacity-100', 'visible');
+                scrollButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        scrollButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const words = [
+  "Fiks",
+  "a Developer",
+  "a Designer",
+  "a Problem Solver",
+  "a Full Stack Developer",
+  "a Software Architect",
+  "a Backend Specialist",
+  "a Frontend Expert",
+  "a Database Designer",
+  "an API Builder",
+  "a System Integrator",
+  "a UI/UX Thinker",
+  "a JavaScript Ninja",
+  "a Python Enthusiast",
+  "a C# Practitioner",
+  "a Django Developer",
+  "a React Developer",
+  "a Node.js Developer",
+  "a TypeScript User",
+  "a SQL Tuner",
+  "a Debugging Wizard",
+  "a Code Reviewer",
+  "a Security Advocate",
+  "a Performance Optimizer",
+  "a Cloud Engineer",
+  "a DevOps Minded Developer",
+  "a RESTful API Creator",
+  "a GraphQL Explorer",
+  "an Agile Collaborator",
+  "a Team Player",
+  "a Leader",
+  "a Mentor",
+  "a Lifelong Learner",
+  "an Open Source Contributor",
+  "a Clean Code Believer",
+  "a Data Modeler",
+  "a Problem Fixer",
+  "a Critical Thinker",
+  "a Tech Enthusiast",
+  "a Fast Learner",
+  "a Debugging Detective",
+  "an Innovator",
+  "a Solution Designer",
+  "a Systems Thinker",
+  "a Continuous Improver",
+  "a Versatile Engineer",
+  "a Software Craftsman",
+  "a Web App Creator",
+  "a Mobile Friendly Developer",
+  "a Scalability Planner",
+  "a Testing Advocate",
+  "a Documentation Writer",
+  "a Business-Oriented Engineer",
+  "a Creative Thinker",
+  "a Code Refactorer",
+  "a Deployment Automator",
+  "a Git Master",
+  "a Container Enthusiast",
+  "a CI/CD Builder",
+  "a Cloud Native Engineer",
+  "a Debugging Specialist",
+  "a Resilient Engineer",
+  "a Passionate Coder",
+  "a Hands-On Builder",
+  "a Visionary Developer",
+  "a Systems Analyst",
+  "a Cross-Platform Developer",
+  "a Time Manager",
+  "a Detail-Oriented Thinker",
+  "a Strong Communicator",
+  "a Code Architect",
+  "a Software Tinkerer",
+  "a Knowledge Sharer",
+  "a Tech Explorer",
+  "a Problem Analyzer",
+  "a Self Starter",
+  "a Collaborative Builder",
+  "an Adaptable Engineer",
+  "a Structured Thinker",
+  "a Strategic Planner",
+  "a Bug Squasher",
+  "a Performance Engineer",
+  "a Prototype Builder",
+  "a Creative Coder",
+  "a Practical Developer",
+  "a Systems Maintainer",
+  "a Logical Thinker",
+  "a Technology Generalist",
+  "a Curious Mind",
+  "a Code Enthusiast",
+  "a Resilient Debugger",
+  "a Bridge Between Design and Code",
+  "a Knowledge Seeker",
+  "a Reliable Engineer",
+  "a Critical Analyst",
+  "a Software Builder",
+  "a Business Solution Creator"
+];
+
+        const typedText = document.getElementById("typed-text");
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            const displayed = currentWord.substring(0, charIndex);
+            typedText.textContent = displayed;
+
+            if (!isDeleting && charIndex < currentWord.length) {
+                charIndex++;
+                setTimeout(type, 150);
+            } else if (isDeleting && charIndex > 0) {
+                charIndex--;
+                setTimeout(type, 100);
+            } else {
+                isDeleting = !isDeleting;
+                if (!isDeleting) {
+                    wordIndex = (wordIndex + 1) % words.length;
+                }
+                setTimeout(type, 1000); 
+            }
+        }
+
+        type();
+    });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const words = [
+  "Fiks",
+  "a Developer",
+  "a Designer",
+  "a Problem Solver",
+  "a Full Stack Developer",
+  "a Software Architect",
+  "a Backend Specialist",
+  "a Frontend Expert",
+  "a Database Designer",
+  "an API Builder",
+  "a System Integrator",
+  "a UI/UX Thinker",
+  "a JavaScript Ninja",
+  "a Python Enthusiast",
+  "a C# Practitioner",
+  "a Django Developer",
+  "a React Developer",
+  "a Node.js Developer",
+  "a TypeScript User",
+  "a SQL Tuner",
+  "a Debugging Wizard",
+  "a Code Reviewer",
+  "a Security Advocate",
+  "a Performance Optimizer",
+  "a Cloud Engineer",
+  "a DevOps Minded Developer",
+  "a RESTful API Creator",
+  "a GraphQL Explorer",
+  "an Agile Collaborator",
+  "a Team Player",
+  "a Leader",
+  "a Mentor",
+  "a Lifelong Learner",
+  "an Open Source Contributor",
+  "a Clean Code Believer",
+  "a Data Modeler",
+  "a Problem Fixer",
+  "a Critical Thinker",
+  "a Tech Enthusiast",
+  "a Fast Learner",
+  "a Debugging Detective",
+  "an Innovator",
+  "a Solution Designer",
+  "a Systems Thinker",
+  "a Continuous Improver",
+  "a Versatile Engineer",
+  "a Software Craftsman",
+  "a Web App Creator",
+  "a Mobile Friendly Developer",
+  "a Scalability Planner",
+  "a Testing Advocate",
+  "a Documentation Writer",
+  "a Business-Oriented Engineer",
+  "a Creative Thinker",
+  "a Code Refactorer",
+  "a Deployment Automator",
+  "a Git Master",
+  "a Container Enthusiast",
+  "a CI/CD Builder",
+  "a Cloud Native Engineer",
+  "a Debugging Specialist",
+  "a Resilient Engineer",
+  "a Passionate Coder",
+  "a Hands-On Builder",
+  "a Visionary Developer",
+  "a Systems Analyst",
+  "a Cross-Platform Developer",
+  "a Time Manager",
+  "a Detail-Oriented Thinker",
+  "a Strong Communicator",
+  "a Code Architect",
+  "a Software Tinkerer",
+  "a Knowledge Sharer",
+  "a Tech Explorer",
+  "a Problem Analyzer",
+  "a Self Starter",
+  "a Collaborative Builder",
+  "an Adaptable Engineer",
+  "a Structured Thinker",
+  "a Strategic Planner",
+  "a Bug Squasher",
+  "a Performance Engineer",
+  "a Prototype Builder",
+  "a Creative Coder",
+  "a Practical Developer",
+  "a Systems Maintainer",
+  "a Logical Thinker",
+  "a Technology Generalist",
+  "a Curious Mind",
+  "a Code Enthusiast",
+  "a Resilient Debugger",
+  "a Bridge Between Design and Code",
+  "a Knowledge Seeker",
+  "a Reliable Engineer",
+  "a Critical Analyst",
+  "a Software Builder",
+  "a Business Solution Creator"
+];
+
+        const typedText = document.getElementById("typed-text");
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            const displayed = currentWord.substring(0, charIndex);
+            typedText.textContent = displayed;
+
+            if (!isDeleting && charIndex < currentWord.length) {
+                charIndex++;
+                setTimeout(type, 150);
+            } else if (isDeleting && charIndex > 0) {
+                charIndex--;
+                setTimeout(type, 100);
+            } else {
+                isDeleting = !isDeleting;
+                if (!isDeleting) {
+                    wordIndex = (wordIndex + 1) % words.length;
+                }
+                setTimeout(type, 1000); // Pause before switching word
+            }
+        }
+
+        type();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fiks Terminal</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #0d0d0d;
+      color: #33ff33;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #terminal-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 15px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    #input-line {
+      display: flex;
+      align-items: center;
+    }
+    #prompt {
+      margin-right: 5px;
+    }
+    #command-input {
+      background: transparent;
+      border: none;
+      color: #33ff33;
+      flex: 1;
+      font-family: monospace;
+      font-size: 16px;
+      outline: none;
+    }
+    .output {
+      margin-bottom: 5px;
+    }
+    .command {
+      color: #00ffff;
+    }
+    .error {
+      color: #ff3333;
+    }
+    .loading {
+      display: inline-block;
+      margin-right: 5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #33ff33;
+      animation: blink 1s infinite;
+    }
+    .loading:nth-child(2) { animation-delay: 0.3s; }
+    .loading:nth-child(3) { animation-delay: 0.5s; }
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 0.2; }
+      25%, 75% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="terminal-container">
+    <div id="output" class="output"></div>
+    <div id="input-line">
+      <span id="prompt">guest@fiks.dev:~$</span>
+      <input id="command-input" type="text" autofocus autocomplete="off">
+    </div>
+  </div>
+
+  <script>
+    const terminal = document.getElementById("terminal-container");
+    const outputDiv = document.getElementById("output");
+    const commandInput = document.getElementById("command-input");
+    const prompt = document.getElementById("prompt");
+
+    let currentDir = "~"; // current directory
+    let fileSystem = {
+      "~": ["funny_directory", "README.md"],
+      "funny_directory": ["backend_skills.txt", "frontend_magic.js", "projects"],
+      "projects": ["secret_ai_experiment", "pizza_ordering_bot"]
+    };
+
+    // Commands object
+    const commands = {
+      help: () => "Available commands: help, about, skills, projects, blog, contact, ls, cd, clear",
+      about: async () => await fetchCommand("about"),
+      skills: async () => await fetchCommand("skills"),
+      projects: async () => await fetchCommand("projects"),
+      blog: async () => await fetchCommand("blog"),
+      contact: async () => await fetchCommand("contact"),
+      clear: () => "__clear__",
+      ls: () => {
+        let items = fileSystem[currentDir] || [];
+        return items.map(i => fileSystem[i] ? `📂 ${i}` : `📄 ${i}`).join("\n");
+      },
+      cd: (arg) => {
+        if(!arg) return "Specify directory: cd <dir>";
+        if(arg === "..") {
+          if(currentDir === "~") return "Already at root directory";
+          if(currentDir === "projects") currentDir = "funny_directory";
+          else if(currentDir === "funny_directory") currentDir = "~";
+          updatePrompt();
+          return "";
+        }
+        if(fileSystem[currentDir].includes(arg) && fileSystem[arg]) {
+          currentDir = arg;
+          updatePrompt();
+          return "";
+        } else {
+          return `Directory not found: ${arg}`;
+        }
+      }
+    };
+
+   async function fetchCommand(cmd) {
+  try {
+    const res = await fetch(`/terminal/api/?command=${cmd}`);
+    if (!res.ok) return `Error fetching ${cmd}: ${res.status}`;
+    const data = await res.json();
+
+    // Format output nicely
+    if(cmd === "projects") {
+      if(data.projects && data.projects.length > 0){
+        return data.projects.map((p,i) => {
+          const tech = p.tech_used.split(',').join(' | ');
+          return `${i+1}. ${p.title}\n   ${p.description.substring(0, 80)}...\n   Tech: ${tech}\n   Live: ${p.live_url || 'N/A'} | GitHub: ${p.github_url || 'N/A'}`;
+        }).join('\n\n');
+      } else return "No projects found.";
+    }
+
+    if(cmd === "blog") {
+      if(data.posts && data.posts.length > 0){
+        return data.posts.map((p,i) => {
+          const date = new Date(p.created_at).toLocaleDateString();
+          return `${i+1}. ${p.title} by ${p.author} (${date})\n   ${p.excerpt.substring(0, 100)}...`;
+        }).join('\n\n');
+      } else return "No blog posts yet.";
+    }
+
+    if(cmd === "skills") {
+      if(data.skills && data.skills.length > 0){
+        return data.skills.map(s => `- ${s.name} (${s.proficiency}%)`).join('\n');
+      } else return "No skills found.";
+    }
+
+    if(cmd === "about") {
+      return data.about || "No info available.";
+    }
+
+    if(cmd === "contact") {
+      return data.contact || "No contact info available.";
+    }
+
+    return data.output || `No output for ${cmd}`;
+
+  } catch (err) {
+    return `Error: ${err.message}`;
+  }
+}
+
+
+    function appendOutput(text, type="normal") {
+      if(!text) return;
+      const div = document.createElement("div");
+      div.classList.add("output");
+      if(type === "command") div.classList.add("command");
+      if(type === "error") div.classList.add("error");
+      div.innerText = text;
+      outputDiv.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function updatePrompt() {
+      prompt.innerText = `guest@fiks.dev:${currentDir}$`;
+    }
+
+    function loadingAnimation(callback) {
+      const loadingDiv = document.createElement("div");
+      loadingDiv.classList.add("output");
+      loadingDiv.innerHTML = '<span class="loading"></span><span class="loading"></span><span class="loading"></span> Initializing FiksOS...';
+      outputDiv.appendChild(loadingDiv);
+      terminal.scrollTop = terminal.scrollHeight;
+      setTimeout(() => {
+        loadingDiv.remove();
+        callback();
+      }, 2000);
+    }
+
+    function startTerminal() {
+      appendOutput("Welcome to Fiks Interactive Dev Terminal 🤖");
+      appendOutput("Type 'help' to see available commands.");
+      commandInput.focus();
+    }
+
+    commandInput.addEventListener("keydown", async function(e) {
+      if(e.key === "Enter") {
+        let input = commandInput.value.trim();
+        appendOutput(`${prompt.innerText} ${input}`, "command");
+
+        if(!input) { appendOutput(""); }
+        else {
+          let [cmd, ...args] = input.split(" ");
+          if(commands[cmd]) {
+            let result = commands[cmd](args.join(" "));
+            if(result instanceof Promise) result = await result;
+            if(result === "__clear__") outputDiv.innerHTML = "";
+            else appendOutput(result);
+          } else {
+            appendOutput(`Command not found: ${cmd}`, "error");
+          }
+        }
+
+        commandInput.value = "";
+      }
+    });
+
+    // Start automatically with loading animation
+    loadingAnimation(startTerminal);
+  </script>
+
+</body>
+</html>

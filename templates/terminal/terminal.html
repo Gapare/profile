@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fiks Terminal</title>
+  <title>Fiks Terminal | Systems Architect</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
       background: #0d0d0d;
       color: #33ff33;
-      font-family: monospace;
+      font-family: 'Courier New', monospace;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -19,16 +19,22 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 15px;
+      padding: 20px;
       overflow-y: auto;
       white-space: pre-wrap;
+      scrollbar-width: thin;
+      scrollbar-color: #33ff33 #0d0d0d;
     }
     #input-line {
       display: flex;
       align-items: center;
+      padding: 10px 20px;
+      background: #1a1a1a;
+      border-top: 1px solid #333;
     }
     #prompt {
-      margin-right: 5px;
+      margin-right: 10px;
+      font-weight: bold;
     }
     #command-input {
       background: transparent;
@@ -39,29 +45,26 @@
       font-size: 16px;
       outline: none;
     }
-    .output {
-      margin-bottom: 5px;
-    }
-    .command {
-      color: #00ffff;
-    }
-    .error {
-      color: #ff3333;
-    }
+    .output { margin-bottom: 8px; line-height: 1.4; }
+    .command { color: #00ffff; font-weight: bold; }
+    .error { color: #ff3333; }
+    .success { color: #33ff33; }
+    .highlight { color: #fbbf24; } /* Amber for links/tech */
+    
     .loading {
       display: inline-block;
       margin-right: 5px;
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #33ff33;
       animation: blink 1s infinite;
     }
-    .loading:nth-child(2) { animation-delay: 0.3s; }
-    .loading:nth-child(3) { animation-delay: 0.5s; }
+    .loading:nth-child(2) { animation-delay: 0.2s; }
+    .loading:nth-child(3) { animation-delay: 0.4s; }
     @keyframes blink {
-      0%, 50%, 100% { opacity: 0.2; }
-      25%, 75% { opacity: 1; }
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
     }
   </style>
 </head>
@@ -71,7 +74,7 @@
     <div id="output" class="output"></div>
     <div id="input-line">
       <span id="prompt">guest@fiks.dev:~$</span>
-      <input id="command-input" type="text" autofocus autocomplete="off">
+      <input id="command-input" type="text" autofocus autocomplete="off" placeholder="Type 'help'...">
     </div>
   </div>
 
@@ -81,91 +84,89 @@
     const commandInput = document.getElementById("command-input");
     const prompt = document.getElementById("prompt");
 
-    let currentDir = "~"; // current directory
+    let currentDir = "~"; 
     let fileSystem = {
-      "~": ["funny_directory", "README.md"],
-      "funny_directory": ["backend_skills.txt", "frontend_magic.js", "projects"],
-      "projects": ["secret_ai_experiment", "pizza_ordering_bot"]
+      "~": ["projects", "README.md", "system_logs"],
+      "projects": ["jackal_pos", "transit_audit", "rural_inventory"],
+      "system_logs": ["kernel.log", "auth.log"]
     };
 
-    // Commands object
     const commands = {
-      help: () => "Available commands: help, about, skills, projects, blog, contact, ls, cd, clear",
+      help: () => "Available commands: help, about, skills, projects, blog, contact, ls, cd, clear, gui, exit",
       about: async () => await fetchCommand("about"),
       skills: async () => await fetchCommand("skills"),
       projects: async () => await fetchCommand("projects"),
       blog: async () => await fetchCommand("blog"),
       contact: async () => await fetchCommand("contact"),
       clear: () => "__clear__",
+      // RETURN TO MAIN SITE
+      gui: () => {
+          appendOutput("Switching to Graphical User Interface...", "success");
+          setTimeout(() => window.location.href = "/", 1000);
+          return "Redirecting...";
+      },
+      exit: () => {
+          appendOutput("Closing session...", "error");
+          setTimeout(() => window.location.href = "/", 1000);
+          return "Goodbye.";
+      },
       ls: () => {
         let items = fileSystem[currentDir] || [];
-        return items.map(i => fileSystem[i] ? `📂 ${i}` : `📄 ${i}`).join("\n");
+        return items.map(i => fileSystem[i] ? `📂 ${i}` : `📄 ${i}`).join("  ");
       },
       cd: (arg) => {
-        if(!arg) return "Specify directory: cd <dir>";
+        if(!arg || arg === "~") { currentDir = "~"; updatePrompt(); return ""; }
         if(arg === "..") {
-          if(currentDir === "~") return "Already at root directory";
-          if(currentDir === "projects") currentDir = "funny_directory";
-          else if(currentDir === "funny_directory") currentDir = "~";
+          if(currentDir !== "~") currentDir = "~";
           updatePrompt();
           return "";
         }
-        if(fileSystem[currentDir].includes(arg) && fileSystem[arg]) {
+        if(fileSystem[currentDir] && fileSystem[currentDir].includes(arg) && fileSystem[arg]) {
           currentDir = arg;
           updatePrompt();
           return "";
-        } else {
-          return `Directory not found: ${arg}`;
         }
+        return `Directory not found: ${arg}`;
       }
     };
 
-   async function fetchCommand(cmd) {
-  try {
-    const res = await fetch(`/terminal/api/?command=${cmd}`);
-    if (!res.ok) return `Error fetching ${cmd}: ${res.status}`;
-    const data = await res.json();
+    async function fetchCommand(cmd) {
+      try {
+        const res = await fetch(`/api/terminal/?command=${cmd}`);
+        if (!res.ok) return `Error: ${res.status} - Could not reach Fiks Backend`;
+        const data = await res.json();
 
-    // Format output nicely
-    if(cmd === "projects") {
-      if(data.projects && data.projects.length > 0){
-        return data.projects.map((p,i) => {
-          const tech = p.tech_used.split(',').join(' | ');
-          return `${i+1}. ${p.title}\n   ${p.description.substring(0, 80)}...\n   Tech: ${tech}\n   Live: ${p.live_url || 'N/A'} | GitHub: ${p.github_url || 'N/A'}`;
-        }).join('\n\n');
-      } else return "No projects found.";
+        if(cmd === "projects") {
+          if(data.projects && data.projects.length > 0){
+            return data.projects.map((p, i) => {
+              let out = `[${i+1}] ${p.title.toUpperCase()}\n`;
+              out += `    Desc: ${p.description}\n`;
+              out += `    Tech: ${p.tech_used}\n`;
+              if(p.download_url) out += `    Download: ${p.download_url}\n`;
+              if(p.github_url)   out += `    GitHub:   ${p.github_url}`;
+              return out;
+            }).join('\n\n');
+          } else return "No active projects found in database.";
+        }
+
+        if(cmd === "skills") {
+          if(data.skills && data.skills.length > 0){
+            return data.skills.map(s => {
+                const dots = ".".repeat(Math.floor(s.proficiency / 10));
+                const empty = " ".repeat(10 - dots.length);
+                return `${s.name.padEnd(15)} [${dots}${empty}] ${s.proficiency}%`;
+            }).join('\n');
+          } else return "No skills indexed.";
+        }
+
+        if(cmd === "about") return data.about || "Architect profile missing.";
+        if(cmd === "contact") return data.contact || "Comms offline.";
+        
+        return data.output || `No data for ${cmd}`;
+      } catch (err) {
+        return `Connection Error: Check if server is live.`;
+      }
     }
-
-    if(cmd === "blog") {
-      if(data.posts && data.posts.length > 0){
-        return data.posts.map((p,i) => {
-          const date = new Date(p.created_at).toLocaleDateString();
-          return `${i+1}. ${p.title} by ${p.author} (${date})\n   ${p.excerpt.substring(0, 100)}...`;
-        }).join('\n\n');
-      } else return "No blog posts yet.";
-    }
-
-    if(cmd === "skills") {
-      if(data.skills && data.skills.length > 0){
-        return data.skills.map(s => `- ${s.name} (${s.proficiency}%)`).join('\n');
-      } else return "No skills found.";
-    }
-
-    if(cmd === "about") {
-      return data.about || "No info available.";
-    }
-
-    if(cmd === "contact") {
-      return data.contact || "No contact info available.";
-    }
-
-    return data.output || `No output for ${cmd}`;
-
-  } catch (err) {
-    return `Error: ${err.message}`;
-  }
-}
-
 
     function appendOutput(text, type="normal") {
       if(!text) return;
@@ -173,6 +174,7 @@
       div.classList.add("output");
       if(type === "command") div.classList.add("command");
       if(type === "error") div.classList.add("error");
+      if(type === "success") div.classList.add("success");
       div.innerText = text;
       outputDiv.appendChild(div);
       terminal.scrollTop = terminal.scrollHeight;
@@ -185,18 +187,19 @@
     function loadingAnimation(callback) {
       const loadingDiv = document.createElement("div");
       loadingDiv.classList.add("output");
-      loadingDiv.innerHTML = '<span class="loading"></span><span class="loading"></span><span class="loading"></span> Initializing FiksOS...';
+      loadingDiv.innerHTML = '<span class="loading"></span><span class="loading"></span><span class="loading"></span> Booting FiksOS v2.0...';
       outputDiv.appendChild(loadingDiv);
-      terminal.scrollTop = terminal.scrollHeight;
       setTimeout(() => {
         loadingDiv.remove();
         callback();
-      }, 2000);
+      }, 1500);
     }
 
     function startTerminal() {
-      appendOutput("Welcome to Fiks Interactive Dev Terminal 🤖");
-      appendOutput("Type 'help' to see available commands.");
+      appendOutput("Fiks Systems Architecture [Version 2.0.26]");
+      appendOutput("(c) 2026 The Jackal Systems. All rights reserved.");
+      appendOutput("---");
+      appendOutput("Type 'projects' to see software or 'gui' to return to visual site.");
       commandInput.focus();
     }
 
@@ -205,26 +208,24 @@
         let input = commandInput.value.trim();
         appendOutput(`${prompt.innerText} ${input}`, "command");
 
-        if(!input) { appendOutput(""); }
-        else {
+        if(input) {
           let [cmd, ...args] = input.split(" ");
-          if(commands[cmd]) {
-            let result = commands[cmd](args.join(" "));
+          if(commands[cmd.toLowerCase()]) {
+            let result = commands[cmd.toLowerCase()](args.join(" "));
             if(result instanceof Promise) result = await result;
             if(result === "__clear__") outputDiv.innerHTML = "";
             else appendOutput(result);
           } else {
-            appendOutput(`Command not found: ${cmd}`, "error");
+            appendOutput(`'${cmd}' is not recognized as an internal command.`, "error");
           }
         }
-
         commandInput.value = "";
       }
     });
 
-    // Start automatically with loading animation
     loadingAnimation(startTerminal);
+    // Keep focus on input
+    document.addEventListener("click", () => commandInput.focus());
   </script>
-
 </body>
 </html>

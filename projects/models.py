@@ -1,13 +1,13 @@
 from django.db import models
-from django.core.files.storage import default_storage
+from cloudinary_storage.storage import MediaCloudinaryStorage, RawMediaCloudinaryStorage
 
 class Profile(models.Model):
     name = models.CharField(max_length=100)
     bio = models.TextField()
-    # Cloudinary handles this automatically via settings.py
+    # Force Image Storage
     profile_image = models.ImageField(
         upload_to="profile_images/", 
-        storage=default_storage,
+        storage=MediaCloudinaryStorage(),
         blank=True, 
         null=True
     )
@@ -26,19 +26,21 @@ class Project(models.Model):
     description = models.TextField()
     tech_used = models.CharField(max_length=200)
     github_url = models.URLField(blank=True)
-    image = models.ImageField(upload_to="project_images/",storage=default_storage, blank=True, null=True)
-    
-    # NEW: The field for our Google Drive magic link
-    apk_url = models.URLField(
+    # Force Image Storage
+    image = models.ImageField(
+        upload_to="project_images/", 
+        storage=MediaCloudinaryStorage(),
         blank=True, 
-        null=True, 
-        verbose_name="Direct APK Download URL",
-        help_text="Paste the Google Drive direct link here to bypass Vercel/Cloudinary size limits."
+        null=True
     )
-    
-    # Keep this for small utilities (<10MB) that might fit on Cloudinary
-    apk_file = models.FileField(upload_to="apks/", blank=True, null=True)
-    
+    apk_url = models.URLField(blank=True, null=True)
+    # Force Raw Storage for non-image files
+    apk_file = models.FileField(
+        upload_to="apks/", 
+        storage=RawMediaCloudinaryStorage(),
+        blank=True, 
+        null=True
+    )
     version = models.CharField(max_length=20, default="v1.0.0")
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -47,7 +49,7 @@ class Project(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.title} ({self.version})"
+        return self.title
 
 class Skill(models.Model):
     # For a professional look, let's add categories

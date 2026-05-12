@@ -1,10 +1,16 @@
 from django.db import models
+from django.core.files.storage import default_storage
 
 class Profile(models.Model):
     name = models.CharField(max_length=100)
     bio = models.TextField()
     # Cloudinary handles this automatically via settings.py
-    profile_image = models.ImageField(upload_to="profile_images/", blank=True, null=True)
+    profile_image = models.ImageField(
+        upload_to="profile_images/", 
+        storage=default_storage,
+        blank=True, 
+        null=True
+    )
     location = models.CharField(max_length=100, blank=True)
     email = models.EmailField(blank=True)
     linkedin_url = models.URLField(blank=True)
@@ -20,7 +26,7 @@ class Project(models.Model):
     description = models.TextField()
     tech_used = models.CharField(max_length=200)
     github_url = models.URLField(blank=True)
-    image = models.ImageField(upload_to="project_images/", blank=True, null=True)
+    image = models.ImageField(upload_to="project_images/",storage=default_storage, blank=True, null=True)
     
     # NEW: The field for our Google Drive magic link
     apk_url = models.URLField(

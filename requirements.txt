@@ -1,0 +1,7 @@
+﻿django
+cloudinary
+django-cloudinary-storage
+dj-database-url
+python-dotenv
+django-markdownx
+psycopg2-binary

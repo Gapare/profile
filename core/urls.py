@@ -13,5 +13,6 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('terminal/', project_views.terminal_view, name='terminal'),
     path("terminal/api/", project_views.terminal_api, name="terminal_api"),
+    path('download/<int:project_id>/', project_views.download_app, name='download_app'),
 ]
 handler500 = 'projects.views.custom_500_view'

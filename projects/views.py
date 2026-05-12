@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from blog.models import Post
+from django.shortcuts import get_object_or_404, redirect
 from projects.models import Project, Skill, Profile
 
 def projects_list(request):
@@ -17,7 +18,13 @@ def custom_500_view(request):
     return render(request, '500.html', status=500)
 
 
-
+def download_app(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    if project.apk_url:
+        return redirect(project.apk_url)
+    elif project.apk_file:
+        return redirect(project.apk_file.url)
+    return redirect('projects_list') # Fallback if no file exists
 
 
 
@@ -35,7 +42,9 @@ def terminal_api(request):
                     "description": p.description,
                     "tech_used": p.tech_used,
                     "github_url": p.github_url,
-                    "live_url": p.live_url
+                    # Provide the clean fiks.co.zw download link to the terminal
+                    "download_url": f"https://fiks.co.zw/download/{p.id}/" if (p.apk_url or p.apk_file) else None,
+                    "version": p.version
                 } for p in projects
             ]
         }

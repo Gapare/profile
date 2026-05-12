@@ -34,7 +34,7 @@ SECRET_KEY = 'django-insecure-s4(+!_@%$4$_f*(9-@yz8q_x!jo0vj0r(2!79ja&wmib1t8ek%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["fiks.co.zw"]
 
 # Application definition
 INSTALLED_APPS = [

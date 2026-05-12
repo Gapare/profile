@@ -1,4 +1,4 @@
-﻿django
+django
 cloudinary
 django-cloudinary-storage
 dj-database-url

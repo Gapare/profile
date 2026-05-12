@@ -1,44 +1,33 @@
 import os
 from pathlib import Path
-import cloudinary_storage
 import dj_database_url
-from cloudinary_storage.storage import MediaCloudinaryStorage
+from dotenv import load_dotenv
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
-# Cloudinary configuration
-cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
-)
-
-# FORCE CLOUDINARY STORAGE - ADD THESE LINES
-import django.core.files.storage
-django.core.files.storage.default_storage = cloudinary_storage.storage.MediaCloudinaryStorage()
-
-# Media files - ENABLE CLOUDINARY
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+# Load .env file if it exists
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# --- DIAGNOSTIC LOGS ---
+# These will show up in your PowerShell and Vercel logs
+print("\n--- FIKS SYSTEM DIAGNOSTICS ---")
+print(f"Base Directory: {BASE_DIR}")
+print(f"DATABASE_URL: {'Found' if os.environ.get('DATABASE_URL') else 'Not Found (Using Local SQLite)'}")
+print(f"Cloudinary: {'Configured' if os.environ.get('CLOUDINARY_CLOUD_NAME') else 'Missing Keys'}")
+print("-------------------------------\n")
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s4(+!_@%$4$_f*(9-@yz8q_x!jo0vj0r(2!79ja&wmib1t8ek%'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-s4(+!_@%$4$_f*(9-@yz8q_x!jo0vj0r(2!79ja&wmib1t8ek%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ["fiks.co.zw"]
+ALLOWED_HOSTS = ["fiks.co.zw", "localhost", "127.0.0.1", ".vercel.app"]
 
 # Application definition
 INSTALLED_APPS = [
-    "cloudinary_storage",
+    "cloudinary_storage",  # MUST be before staticfiles
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +43,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Good for static files on Vercel
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -71,6 +61,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -81,53 +72,56 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+# Database
+# This block prevents the 'ImproperlyConfigured' error by providing a hard-coded fallback
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+# Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'fiksengineer@gmail.com'
-EMAIL_HOST_PASSWORD = '@gp200.com'
-
-# Database
-
-# Replace your current DATABASES block with this:
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600
-    )
-}
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER', 'fiksengineer@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '@gp200.com')
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Harare' # Updated to your local time
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static & Media (Cloudinary)
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Cloudinary Setup
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Cloudinary media URL (remove local media settings)
-MEDIA_URL = '/media/'  # This is fine for URL generation, but files go to Cloudinary
-# REMOVED: MEDIA_ROOT = os.path.join(BASE_DIR, 'media') - This conflicts with Cloudinary

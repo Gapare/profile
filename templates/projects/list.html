@@ -236,9 +236,8 @@
                         {% endfor %}
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="flex flex-col space-y-3">
-                        <div class="flex space-x-2">
+                        <div class="flex flex-wrap gap-2">
                             {% if project.github_url %}
                             <a href="{{ project.github_url }}" target="_blank"
                                 class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded flex items-center text-sm transition-all duration-300 transform hover:scale-105">
@@ -246,14 +245,14 @@
                             </a>
                             {% endif %}
 
-                            {% if project.apk_file %}
-                            <!-- Primary Download Button for APKs -->
-                            <a href="{{ project.apk_file.url }}" download
+                            {# Logic for Android APKs (Cloudinary File OR Google Drive URL) #}
+                            {% if project.apk_url or project.apk_file %}
+                            <a href="{% if project.apk_url %}{{ project.apk_url }}{% else %}{{ project.apk_file.url }}{% endif %}"
+                                target="_blank" {% if not project.apk_url %}download{% endif %}
                                 class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex items-center text-sm transition-all duration-300 shadow-lg transform hover:scale-105">
                                 <i class="fab fa-android mr-2 text-lg"></i> Download APK
                             </a>
                             {% elif project.live_url %}
-                            <!-- Standard Web Link -->
                             <a href="{{ project.live_url }}" target="_blank"
                                 class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center text-sm transition-all duration-300 transform hover:scale-105">
                                 <i class="fas fa-external-link-alt mr-2"></i> Live Demo
@@ -261,10 +260,10 @@
                             {% endif %}
                         </div>
 
-                        {% if project.apk_file %}
-                        <!-- Trust Builder: Instructions for non-Play Store installs -->
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 italic">
+                        {% if project.apk_url or project.apk_file %}
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 italic leading-tight">
                             * Enable "Install from Unknown Sources" in Android settings to install.
+                            <br>Current Version: {{ project.version }}
                         </p>
                         {% endif %}
                     </div>

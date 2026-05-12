@@ -9,13 +9,7 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# --- DIAGNOSTIC LOGS ---
-# These will show up in your PowerShell and Vercel logs
-print("\n--- FIKS SYSTEM DIAGNOSTICS ---")
-print(f"Base Directory: {BASE_DIR}")
-print(f"DATABASE_URL: {'Found' if os.environ.get('DATABASE_URL') else 'Not Found (Using Local SQLite)'}")
-print(f"Cloudinary: {'Configured' if os.environ.get('CLOUDINARY_CLOUD_NAME') else 'Missing Keys'}")
-print("-------------------------------\n")
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-s4(+!_@%$4$_f*(9-@yz8q_x!jo0vj0r(2!79ja&wmib1t8ek%')
@@ -89,16 +83,16 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+# email settings
 
-
-
-# Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER', 'fiksengineer@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '@gp200.com')
+
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER') 
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
